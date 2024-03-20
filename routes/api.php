@@ -13,3 +13,5 @@ Route::post( '/registration', [AuthController::class, 'registration'] );
 Route::post( '/login', [AuthController::class, 'login'] );
 
 Route::post( '/logout', [AuthController::class, 'logout'] );
+
+// test comment
