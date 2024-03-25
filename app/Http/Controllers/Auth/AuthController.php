@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\LogoutRequest;
@@ -22,7 +21,7 @@ class AuthController extends Controller {
             'name'     => $name,
             'username' => $username,
             'email'    => $email,
-            'password' => Hash::make( $password ),
+            'password' => $password,
         ] );
 
         $accessToken = $user->createToken( 'accessToken' )->accessToken;
@@ -38,22 +37,20 @@ class AuthController extends Controller {
 
     public function login( LoginRequest $request ) {
 
-        // dd([env( 'CLIENT_ID_PASSPORT' ), env( 'CLIENT_SECRET_PASSPORT' )]);
+        $user = User::whereEmail( $request->email )->first();
 
-        $user = User::where( 'email', $request->email )->first();
-
-        if ( !$user || !Hash::check( $request->password, $user->password ) ) {
+        if ( !$user ) { // throw error }
             return response()->json( [
-                'message' => 'Email or Password incorrect.',
-            ], 401 );
+                'message' => 'User not found',
+            ], 404 );
         }
 
         $response = Http::asForm()->post( 'http://127.0.0.1:8001/oauth/token', [
             'grant_type'    => 'password',
             'client_id'     => env( 'CLIENT_ID_PASSPORT' ),
             'client_secret' => env( 'CLIENT_SECRET_PASSPORT' ),
-            'username'      => $user->username,
-            'password'      => $user->password,
+            'username'      => $request->username,
+            'password'      => $request->password,
             'scope'         => '*',
         ] );
 
