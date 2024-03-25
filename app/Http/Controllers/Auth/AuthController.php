@@ -15,10 +15,12 @@ class AuthController extends Controller {
     public function registration( RegistrationRequest $request ) {
         $name     = $request->name;
         $email    = $request->email;
+        $username = $request->username;
         $password = $request->password;
 
         $user = User::create( [
             'name'     => $name,
+            'username' => $username,
             'email'    => $email,
             'password' => Hash::make( $password ),
         ] );
@@ -28,12 +30,15 @@ class AuthController extends Controller {
         return response( [
             'id'           => $user->id,
             'name'         => $user->name,
+            'username'     => $user->username,
             'email'        => $user->email,
             'access_token' => $accessToken,
         ] );
     }
 
     public function login( LoginRequest $request ) {
+
+        // dd([env( 'CLIENT_ID_PASSPORT' ), env( 'CLIENT_SECRET_PASSPORT' )]);
 
         $user = User::where( 'email', $request->email )->first();
 
@@ -43,11 +48,11 @@ class AuthController extends Controller {
             ], 401 );
         }
 
-        $response = Http::asForm()->post( 'http://127.0.0.1:8000/oauth/token', [
+        $response = Http::asForm()->post( 'http://127.0.0.1:8001/oauth/token', [
             'grant_type'    => 'password',
             'client_id'     => env( 'CLIENT_ID_PASSPORT' ),
             'client_secret' => env( 'CLIENT_SECRET_PASSPORT' ),
-            'username'      => $user->email,
+            'username'      => $user->username,
             'password'      => $user->password,
             'scope'         => '*',
         ] );

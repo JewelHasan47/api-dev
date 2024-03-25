@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Laravel\Passport\Passport;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\AuthCode;
@@ -22,6 +23,7 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
+
         Passport::enablePasswordGrant();
 
         Passport::useTokenModel( Token::class );
