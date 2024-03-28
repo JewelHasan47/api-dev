@@ -1,7 +1,7 @@
-php artisan passport:client
-php artisan passport:client --passport // login
+php artisan passport:client --personal // create user
+php artisan passport:client --password // login
 
-save client id and client secret in env file
+save client password id and client password secret in env file
 
 for passport you need to run your app in 2 port.
 example: 8000 and 8001

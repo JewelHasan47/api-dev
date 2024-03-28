@@ -39,7 +39,7 @@ class AuthController extends Controller {
 
         $user = User::whereEmail( $request->email )->first();
 
-        if ( !$user ) { // throw error }
+        if ( !User::whereEmail( $request->email )->exists() ) {
             return response()->json( [
                 'message' => 'User not found',
             ], 404 );
@@ -49,9 +49,8 @@ class AuthController extends Controller {
             'grant_type'    => 'password',
             'client_id'     => env( 'CLIENT_ID_PASSPORT' ),
             'client_secret' => env( 'CLIENT_SECRET_PASSPORT' ),
-            'username'      => $request->username,
+            'username'      => $request->email,
             'password'      => $request->password,
-            'scope'         => '*',
         ] );
 
         return $response->json();
