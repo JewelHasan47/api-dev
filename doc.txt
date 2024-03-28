@@ -1,3 +1,5 @@
+php artisan passport:install
+After install passport client and passport will be created.
 php artisan passport:client --personal // create user
 php artisan passport:client --password // login
 
