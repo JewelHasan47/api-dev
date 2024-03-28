@@ -1,5 +1,9 @@
-php artisan passport:install
+php artisan passport:install (only 1 time can run this command otherwise new useless file will created in migration folder)
+
 After install passport client and passport will be created.
+
+if already run the php artisan passport:install then
+
 php artisan passport:client --personal // create user
 php artisan passport:client --password // login
 
