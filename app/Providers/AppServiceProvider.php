@@ -31,5 +31,9 @@ class AppServiceProvider extends ServiceProvider {
         Passport::useAuthCodeModel( AuthCode::class );
         Passport::useClientModel( Client::class );
         Passport::usePersonalAccessClientModel( PersonalAccessClient::class );
+
+        Passport::tokensExpireIn(now()->addDays(5));
+        Passport::refreshTokensExpireIn(now()->addDays(5));
+        Passport::personalAccessTokensExpireIn(now()->addMonths(5));
     }
 }
