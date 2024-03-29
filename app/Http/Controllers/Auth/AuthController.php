@@ -37,8 +37,6 @@ class AuthController extends Controller {
 
     public function login( LoginRequest $request ) {
 
-        $user = User::whereEmail( $request->email )->first();
-
         if ( !User::whereEmail( $request->email )->exists() ) {
             return response()->json( [
                 'message' => 'User not found',
@@ -57,7 +55,12 @@ class AuthController extends Controller {
     }
 
     public function logout( LogoutRequest $request ) {
-        // Write code
+
+        $request->user()->token()->revoke();
+
+        return response()->json( [
+            'message' => 'Successfully logged out',
+        ] );
     }
 
 }
