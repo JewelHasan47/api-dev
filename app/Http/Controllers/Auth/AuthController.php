@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Notifications\Auth\WelcomeNotification;
-use Notification;
-use Password;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Password;
 use App\Http\Requests\Auth\LogoutRequest;
+use Illuminate\Support\Facades\Notification;
 use App\Http\Requests\Auth\RegistrationRequest;
+use App\Notifications\Auth\WelcomeNotification;
 use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\SendPasswordResetLinkRequest;
 
