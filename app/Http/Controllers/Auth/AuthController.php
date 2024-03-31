@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\Auth\WelcomeNotification;
+use Notification;
+use Password;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\LogoutRequest;
 use App\Http\Requests\Auth\RegistrationRequest;
+use App\Http\Requests\Auth\ChangePasswordRequest;
+use App\Http\Requests\Auth\SendPasswordResetLinkRequest;
 
 class AuthController extends Controller {
 
@@ -25,6 +30,8 @@ class AuthController extends Controller {
         ] );
 
         $accessToken = $user->createToken( 'accessToken' )->accessToken;
+
+        Notification::send( $user, new WelcomeNotification() );
 
         return response( [
             'id'           => $user->id,
@@ -61,6 +68,29 @@ class AuthController extends Controller {
         return response()->json( [
             'message' => 'Successfully logged out',
         ] );
+    }
+
+    public function changePassword( ChangePasswordRequest $request ) {
+        // Write code
+    }
+
+    public function sendPasswordResetLink( SendPasswordResetLinkRequest $request ) {
+
+        if ( !User::whereEmail( $request->email )->exists() ) {
+            return response()->json( [
+                'message' => 'User not found',
+            ], 404 );
+        }
+
+        Password::sendResetLink( $request->only( 'email' ) );
+
+        return response()->json( [
+            'message' => 'We have e-mailed your password reset link!',
+        ] );
+    }
+
+    public function resetPassword() {
+
     }
 
 }

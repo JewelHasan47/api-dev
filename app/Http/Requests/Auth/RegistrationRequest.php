@@ -13,7 +13,7 @@ class RegistrationRequest extends FormRequest {
     public function rules(): array {
         return [
             'name'     => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
@@ -27,6 +27,7 @@ class RegistrationRequest extends FormRequest {
             'username.required'  => 'Please enter your username.',
             'username.string'    => 'Please enter a valid username.',
             'username.max'       => 'Your username is too long.',
+            'username.unique'    => 'This username is already exists.',
             'email.required'     => 'Please enter your email address.',
             'email.string'       => 'Please enter a valid email address.',
             'email.unique'       => 'This email address is already registered.',
