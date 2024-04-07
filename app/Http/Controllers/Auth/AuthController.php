@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Password;
 use App\Http\Requests\Auth\LogoutRequest;
-use Illuminate\Support\Facades\Notification;
 use App\Http\Requests\Auth\RegistrationRequest;
 use App\Notifications\Auth\WelcomeNotification;
 use App\Http\Requests\Auth\ChangePasswordRequest;
@@ -17,21 +16,14 @@ use App\Http\Requests\Auth\SendPasswordResetLinkRequest;
 class AuthController extends Controller {
 
     public function registration( RegistrationRequest $request ) {
-        $name     = $request->name;
-        $email    = $request->email;
-        $username = $request->username;
-        $password = $request->password;
 
-        $user = User::create( [
-            'name'     => $name,
-            'username' => $username,
-            'email'    => $email,
-            'password' => $password,
-        ] );
+        $user = User::create( $request->only( 'name', 'username', 'email', 'password' ) );
 
         $accessToken = $user->createToken( 'accessToken' )->accessToken;
 
-        Notification::send( $user, new WelcomeNotification() );
+        $user->notify( new WelcomeNotification() );
+
+        // Notification::send( $user, new WelcomeNotification() );
 
         return response( [
             'id'           => $user->id,
