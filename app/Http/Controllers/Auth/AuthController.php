@@ -42,7 +42,7 @@ class AuthController extends Controller {
             ], 404 );
         }
 
-        $response = Http::asForm()->post( 'http://127.0.0.1:8001/oauth/token', [
+        $loggedIn = Http::asForm()->post( 'http://127.0.0.1:8001/oauth/token', [
             'grant_type'    => 'password',
             'client_id'     => env( 'CLIENT_ID_PASSPORT' ),
             'client_secret' => env( 'CLIENT_SECRET_PASSPORT' ),
@@ -50,7 +50,18 @@ class AuthController extends Controller {
             'password'      => $request->password,
         ] );
 
-        return $response->json();
+        $response = $loggedIn->json();
+
+        return response()->json( [
+            'id'           => $response['user_id'],
+            'name'         => $response['name'],
+            'username'     => $response['username'],
+            'email'        => $response['email'],
+            'access_token' => $response['access_token'],
+            'token_type'   => $response['token_type'],
+            'expires_in'   => $response['expires_in'],
+        ] );
+
     }
 
     public function logout( LogoutRequest $request ) {
