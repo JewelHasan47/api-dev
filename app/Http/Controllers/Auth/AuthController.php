@@ -36,7 +36,9 @@ class AuthController extends Controller {
 
     public function login( LoginRequest $request ) {
 
-        if ( !User::whereEmail( $request->email )->exists() ) {
+        $user = User::whereEmail( $request->email )->first();
+
+        if ( !$user ) {
             return response()->json( [
                 'message' => 'User not found',
             ], 404 );
@@ -53,13 +55,14 @@ class AuthController extends Controller {
         $response = $loggedIn->json();
 
         return response()->json( [
-            'id'           => $response['user_id'],
-            'name'         => $response['name'],
-            'username'     => $response['username'],
-            'email'        => $response['email'],
-            'access_token' => $response['access_token'],
-            'token_type'   => $response['token_type'],
-            'expires_in'   => $response['expires_in'],
+            'id'            => $user->id,
+            'name'          => $user->name,
+            'username'      => $user->username,
+            'email'         => $user->email,
+            'token_type'    => $response['token_type'],
+            'expires_in'    => $response['expires_in'],
+            'access_token'  => $response['access_token'],
+            'refresh_token' => $response['refresh_token'],
         ] );
 
     }
