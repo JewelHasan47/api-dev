@@ -16,8 +16,8 @@ Route::post( '/logout', [AuthController::class, 'logout'] )->middleware( 'auth:a
 
 Route::post( '/access-token', [AuthController::class, 'accessToken'] );
 
-Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('auth:api');
+Route::post( '/change-password', [AuthController::class, 'changePassword'] )->middleware( 'auth:api' );
 
 Route::post( '/forgot-password', [AuthController::class, 'sendPasswordResetLink'] );
 
-Route::post( '/reset-password/{token}', [AuthController::class, 'resetPassword'] )->name('password.reset');
+Route::post( '/reset-password/{token}', [AuthController::class, 'resetPassword'] )->name( 'password.reset' );
