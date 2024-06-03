@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Requests\Auth\AccessTokenRequest;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
@@ -73,6 +74,16 @@ class AuthController extends Controller {
 
         return response()->json( [
             'message' => 'Successfully logged out',
+        ] );
+    }
+
+    public function accessToken(AccessTokenRequest $request) {
+
+        $loggedIn = Http::asForm()->post( 'http://127.0.0.1:8001/oauth/token', [
+            'grant_type'    => 'refresh_token',
+            'client_id'     => env( 'CLIENT_ID_PASSPORT' ),
+            'client_secret' => env( 'CLIENT_SECRET_PASSPORT' ),
+            'refresh_token' => $request->refresh_token,
         ] );
     }
 
